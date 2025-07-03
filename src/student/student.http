@@ -1,0 +1,52 @@
+###Obtener todas los alumnos
+GET http://localhost:3000/api/students
+
+###Obtener un alumno (id: a02b91bc-3769-4221-beb1-d7a3aeba7dad)
+GET http://localhost:3000/api/students/a02b91bc-3769-4221-beb1-d7a3aeba7dad
+
+###Crear un alumno
+# @prompt name
+# @prompt description
+# @prompt mail
+POST http://localhost:3000/api/students
+Content-Type: application/json
+
+{
+    "name": "{{name}}",
+    "surname": "{{description}}",
+    "mail": "{{mail}}",
+    "profile_picture": "noPhoto"
+}
+
+###Crear un alumno - rápido
+POST http://localhost:3000/api/students
+Content-Type: application/json
+
+{
+    "name": "Carlos",
+    "surname": "Gugliermino",
+    "mail": "carlosRichard@gmail.com",
+    "profile_picture": "noPhoto"
+}
+
+###Modificar un alumno existente (PUT) 
+PUT http://localhost:3000/api/students/a02b91bc-3769-4221-beb1-d7a3aeba7dad
+Content-Type: application/json
+
+{
+    "name": "Lucas",
+    "surname": "Trincavelli",
+    "mail": "lucatrincavelli@gmail.com",
+    "profile_picture": "noPhoto"
+}
+
+###Modificar un alumno existente (PATCH)
+PATCH http://localhost:3000/api/students/a02b91bc-3769-4221-beb1-d7a3aeba7dad
+Content-Type: application/json
+
+{
+    "surname": "Pedemonte"
+}
+
+###Borrar un alumno
+DELETE http://localhost:3000/api/students/9bd1d313-7dee-4745-9849-d5d996d26748

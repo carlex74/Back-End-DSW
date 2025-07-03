@@ -1,0 +1,45 @@
+###Obtener todas las instituciones
+GET http://localhost:3000/api/institutions
+
+###Obtener una institucion (id: a02b91bc-3769-4221-beb1-d7a3aeba7dad)
+GET http://localhost:3000/api/institutions/a02b91bc-3769-4221-beb1-d7a3aeba7dad
+
+###Crear una institucion
+# @prompt name
+# @prompt description
+POST http://localhost:3000/api/institutions
+Content-Type: application/json
+
+{
+    "name": "{{name}}",
+    "description": "{{description}}"
+}
+
+###Crear una institucion - rápido
+POST http://localhost:3000/api/institutions
+Content-Type: application/json
+
+{
+    "name": "Institucion de Prueba",
+    "description": "Descripcion de prueba"
+}
+
+###Modificar una institucion existente (PUT)
+PUT http://localhost:3000/api/institutions/a02b91bc-3769-4221-beb1-d7a3aeba7dad
+Content-Type: application/json
+
+{
+    "name": "UGR",
+    "description": "Universidad del Gran Rosario"
+}
+
+###Modificar una institucion existente (PATCH)
+PATCH http://localhost:3000/api/institutions/a02b91bc-3769-4221-beb1-d7a3aeba7dad
+Content-Type: application/json
+
+{
+    "description": "Descripcion modificada"
+}
+
+###Borrar una institucion
+DELETE http://localhost:3000/api/institutions/a02b91bc-3769-4221-beb1-d7a3aeba7dad

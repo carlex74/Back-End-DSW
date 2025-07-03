@@ -1,0 +1,36 @@
+### obtener todos los tipoCurso
+GET http://localhost:3000/api/courseTypes
+
+
+### obtener un tipoCurso
+GET http://localhost:3000/api/courseTypes/a02b91bc-3769-4221-beb1-d7a3aeba7dad
+
+### crear un nuevo tipoCurso
+POST http://localhost:3000/api/courseTypes
+Content-Type: application/json
+
+{
+  "name": "Javascript",
+  "description": "Curso de Javascript"
+}
+
+### modificar un tipoCurso
+PUT http://localhost:3000/api/courseTypes/354a831c-2c4b-4e60-9f14-3313980f7f78
+Content-Type: application/json
+
+{
+  "name": "Python",
+  "description": "Curso de Python"
+}
+
+### modificar tipoCurso
+PATCH http://localhost:3000/api/courseTypes/a02b91bc-3769-4221-beb1-d7a3aeba7dad
+Content-Type: application/json
+
+{
+  "name": "C#",
+  "description": "Curso de C#" 
+}
+
+### borrar un tipoCurso
+DELETE http://localhost:3000/api/courseTypes/354a831c-2c4b-4e60-9f14-3313980f7f78

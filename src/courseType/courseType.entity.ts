@@ -1,9 +1,9 @@
 import crypto from 'node:crypto';
 
-export class TipoCurso {
+export class CourseType {
   constructor(
-    public nombre: string,
-    public descripcion: string,
+    public name: string,
+    public description: string,
     public id = crypto.randomUUID()
   ) {}
 }

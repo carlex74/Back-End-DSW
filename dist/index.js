@@ -1,8 +1,8 @@
 import express from 'express';
-import { tipoCursoRouter } from './tipoCursos/tipoCurso.routes.js';
+import { courseTypeRouter } from './courseType/courseType.routes.js';
 const app = express();
 app.use(express.json());
-app.use('/api/tipoCursos', tipoCursoRouter);
+app.use('/api/courseTypes', courseTypeRouter);
 app.use((_, res) => {
     return res.status(404).send({ message: 'Recurso no encontrado' });
 });
