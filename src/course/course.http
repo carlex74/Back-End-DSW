@@ -1,4 +1,0 @@
-
-### crear un nuevo curso
-GET http://localhost:3000/api/courses
-Content-Type: application/json

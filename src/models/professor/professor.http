@@ -2,8 +2,7 @@
 GET http://localhost:3000/api/professors
 
 ###Obtener un profesor (id: a02b91bc-3769-4221-beb1-d7a3aeba7dad)
-GET http://localhost:3000/api/professors/a02b91bc-3769-4221-beb1-d7a3aeba7dac
-
+GET http://localhost:3000/api/professors/686c0cca07fd2bcda26f8117
 
 ###Crear un profesor - rápido
 POST http://localhost:3000/api/professors
@@ -14,7 +13,8 @@ Content-Type: application/json
     "surname": "Xavier",
     "mail": "CXavier@gmail.com",
     "profile_picture": "noPhoto",
-    "state": "accepted"
+    "state": "accepted",
+    "institution": "686c1b7668e202f38df086c8"
 }
 
 ###Modificar un profesor existente (PUT) 

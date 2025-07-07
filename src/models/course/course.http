@@ -1,0 +1,15 @@
+
+### Obtener todos los cursos
+GET http://localhost:3000/api/courses
+Content-Type: application/json
+
+### crear un nuevo curso
+POST http://localhost:3000/api/courses
+Content-Type: application/json
+
+{
+  "name": "Curso de Node.js",
+  "description": "Curso avanzado de Node.js",
+  "courseType": "686c017c5559dcad57bc6fa6",
+  "professor": "686c1b7e68e202f38df086c9"
+}

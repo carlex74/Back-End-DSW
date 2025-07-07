@@ -16,3 +16,4 @@ institutionRouter.post('/', sanitizeInstitutionInput, add);
 institutionRouter.put('/:id', sanitizeInstitutionInput, update);
 institutionRouter.patch('/:id', sanitizeInstitutionInput, update);
 institutionRouter.delete('/:id', remove);
+

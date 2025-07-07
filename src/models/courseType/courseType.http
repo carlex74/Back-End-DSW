@@ -3,7 +3,7 @@ GET http://localhost:3000/api/courseTypes
 
 
 ### obtener un tipoCurso
-GET http://localhost:3000/api/courseTypes/a02b91bc-3769-4221-beb1-d7a3aeba7dad
+GET http://localhost:3000/api/courseTypes/686c017c5559dcad57bc6fa6
 
 ### crear un nuevo tipoCurso
 POST http://localhost:3000/api/courseTypes
@@ -15,7 +15,7 @@ Content-Type: application/json
 }
 
 ### modificar un tipoCurso
-PUT http://localhost:3000/api/courseTypes/354a831c-2c4b-4e60-9f14-3313980f7f78
+PUT http://localhost:3000/api/courseTypes/686c017c5559dcad57bc6fa6
 Content-Type: application/json
 
 {
