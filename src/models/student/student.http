@@ -6,14 +6,14 @@ GET http://localhost:3000/api/students/a02b91bc-3769-4221-beb1-d7a3aeba7dad
 
 ###Crear un alumno
 # @prompt name
-# @prompt description
+# @prompt surname
 # @prompt mail
 POST http://localhost:3000/api/students
 Content-Type: application/json
 
 {
     "name": "{{name}}",
-    "surname": "{{description}}",
+    "surname": "{{surname}}",
     "mail": "{{mail}}",
     "profile_picture": "noPhoto"
 }
