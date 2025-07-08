@@ -67,7 +67,13 @@ async function findOne(req: Request, res: Response) {
 
 async function add(req: Request, res: Response) {
   try {
-    const appeals = em.create(Appeal, req.body.sanitizedInput);
+    
+    const appealData = {
+      ...req.body.sanitizedInput,
+      state: 'pending',
+    };
+
+    const appeals = em.create(Appeal, appealData);
     await em.flush();
     res.status(201).json({
       message: 'Application created',

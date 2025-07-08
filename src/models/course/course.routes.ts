@@ -4,8 +4,8 @@ import { sanitizedCourseInput, findAll, findOne, add, update, remove } from "./c
 export const courseRouter = Router()
 
 courseRouter.get('/', findAll)
-courseRouter.get('/', findOne)
+courseRouter.get('/:id', findOne)
 courseRouter.post('/', sanitizedCourseInput, add)
-courseRouter.put('/', sanitizedCourseInput, update)
-courseRouter.patch('/', sanitizedCourseInput, update)
-courseRouter.delete('/', remove)
+courseRouter.put('/:id', sanitizedCourseInput, update);
+courseRouter.patch('/:id', sanitizedCourseInput, update);
+courseRouter.delete('/:id', remove);

@@ -49,4 +49,4 @@ Content-Type: application/json
 }
 
 ###Borrar un alumno
-DELETE http://localhost:3000/api/students/9bd1d313-7dee-4745-9849-d5d996d26748
+DELETE http://localhost:3000/api/students/686d7a5c46c27757b7f72ba1

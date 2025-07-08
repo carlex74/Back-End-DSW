@@ -4,8 +4,8 @@ import { sanitizedAppealInput, findAll, findOne, add, update, remove } from "./a
 export const appealRouter = Router()
 
 appealRouter.get('/', findAll)
-appealRouter.get('/', findOne)
+appealRouter.get('/:id', findOne);
 appealRouter.post('/', sanitizedAppealInput, add)
-appealRouter.put('/', sanitizedAppealInput, update)
-appealRouter.patch('/', sanitizedAppealInput, update)
-appealRouter.delete('/', remove)
+appealRouter.put('/:id', sanitizedAppealInput, update);
+appealRouter.patch('/:id', sanitizedAppealInput, update);
+appealRouter.delete('/:id', remove);
