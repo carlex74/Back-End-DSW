@@ -1,11 +1,11 @@
-import { application, NextFunction, Request, Response } from 'express';
-import { Application } from './application.entity.js';
+import { NextFunction, Request, Response } from 'express';
+import { Appeal } from './appeal.entity.js';
 import { orm } from '../../shared/db/orm.js';
 
 // em : EntityManager
 const em = orm.em;
 
-const sanitizedApplicationInput = (
+const sanitizedAppealInput = (
   req: Request,
   res: Response,
   next: NextFunction
@@ -26,8 +26,8 @@ const sanitizedApplicationInput = (
 
 async function findAll(req: Request, res: Response) {
   try {
-    const applications = await em.find(
-      Application,
+    const appeals = await em.find(
+      Appeal,
       {},
       {
         populate: ['professor'],
@@ -35,7 +35,7 @@ async function findAll(req: Request, res: Response) {
     );
     res.status(200).json({
       message: 'Application found',
-      data: applications,
+      data: appeals,
     });
   } catch (error: any) {
     res.status(500).json({
@@ -47,8 +47,8 @@ async function findAll(req: Request, res: Response) {
 async function findOne(req: Request, res: Response) {
   try {
     const id = req.params.id;
-    const applications = await em.findOneOrFail(
-      Application,
+    const appeals = await em.findOneOrFail(
+      Appeal,
       { id },
       {
         populate: ['professor'],
@@ -56,7 +56,7 @@ async function findOne(req: Request, res: Response) {
     );
     res.status(200).json({
       message: 'Application found',
-      data: applications,
+      data: appeals,
     });
   } catch (error: any) {
     res.status(500).json({
@@ -67,11 +67,11 @@ async function findOne(req: Request, res: Response) {
 
 async function add(req: Request, res: Response) {
   try {
-    const applications = em.create(Application, req.body.sanitizedInput);
+    const appeals = em.create(Appeal, req.body.sanitizedInput);
     await em.flush();
     res.status(201).json({
       message: 'Application created',
-      data: applications,
+      data: appeals,
     });
   } catch (error: any) {
     res.status(500).json({
@@ -83,12 +83,12 @@ async function add(req: Request, res: Response) {
 async function update(req: Request, res: Response) {
   try {
     const id = req.params.id;
-    const applicationToUpdate = await em.findOneOrFail(Application, { id });
-    em.assign(applicationToUpdate, req.body.sanitizedInput);
+    const appealToUpdate = await em.findOneOrFail(Appeal, { id });
+    em.assign(appealToUpdate, req.body.sanitizedInput);
     await em.flush();
     res.status(200).json({
       message: 'Application updated',
-      data: applicationToUpdate,
+      data: appealToUpdate,
     });
   } catch (error: any) {
     res.status(500).json({
@@ -100,8 +100,8 @@ async function update(req: Request, res: Response) {
 async function remove(req: Request, res: Response) {
   try {
     const id = req.params.id;
-    const applications = em.getReference(Application, id);
-    await em.removeAndFlush(applications);
+    const appeals = em.getReference(Appeal, id);
+    await em.removeAndFlush(appeals);
     res.status(200).json({
       message: 'Application deleted',
     });
@@ -110,4 +110,4 @@ async function remove(req: Request, res: Response) {
   }
 }
 
-export { sanitizedApplicationInput, findAll, findOne, add, update, remove };
+export { sanitizedAppealInput, findAll, findOne, add, update, remove };
