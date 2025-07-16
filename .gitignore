@@ -16,6 +16,9 @@ dist/**/*
 
 node_modules
 
+# environment files
+.env
+
 # vscode
 .vscode/*
 !.vscode/settings.json
