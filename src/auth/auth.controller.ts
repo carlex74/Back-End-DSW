@@ -1,4 +1,3 @@
-
 import { Request, Response } from 'express';
 import { AuthService } from './auth.service.js';
 import { orm } from '../shared/db/orm.js';
@@ -13,7 +12,8 @@ async function register(req: Request, res: Response) {
       message: 'User registered successfully',
       data: user,
     });
-  } catch (error: any) { // Check if error is an instance of Error <- check if this is needed
+  } catch (error: any) {
+    // Check if error is an instance of Error <- check if this is needed
     res.status(400).json({ message: error.message });
   }
 }
@@ -27,3 +27,5 @@ async function login(req: Request, res: Response) {
     res.status(401).json({ message: error.message });
   }
 }
+
+export { register, login };

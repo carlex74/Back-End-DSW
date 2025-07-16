@@ -1,0 +1,19 @@
+### HTTP Requests for Authentication
+POST http://localhost:3000/api/auth/register
+Content-Type: application/json
+
+{
+  "name": "Juan",
+  "surname": "Perez",
+  "mail": "juan.perez@email.com",
+  "password_plaintext": "unaClaveSegura123"
+}
+
+### Login Request
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+{
+  "mail": "juan.perez@email.com",
+  "password_plaintext": "unaClaveSegura123"
+}
