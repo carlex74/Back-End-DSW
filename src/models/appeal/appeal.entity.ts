@@ -1,6 +1,7 @@
 import { Entity, Property, ManyToOne, Rel } from '@mikro-orm/core';
 import { BaseEntity } from '../../shared/db/baseEntity.entity.js';
 import { Professor } from '../professor/professor.entity.js';
+import { User } from '../user/user.entity.js'
 
 @Entity()
 export class Appeal extends BaseEntity {
@@ -15,4 +16,7 @@ export class Appeal extends BaseEntity {
 
   @ManyToOne(() => Professor, { nullable: false })
   professor!: Rel<Professor>;
+
+  @ManyToOne(() => User, {nullable: true})
+  user?: Rel<User>
 }

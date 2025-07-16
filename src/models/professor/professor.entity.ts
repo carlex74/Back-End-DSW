@@ -2,44 +2,26 @@ import {
   Entity,
   OneToMany,
   Property,
-  Cascade,
   Collection,
   ManyToOne,
   Rel,
+  OneToOne,
 } from '@mikro-orm/core';
 import { BaseEntity } from '../../shared/db/baseEntity.entity.js';
 import { Course } from '../course/course.entity.js';
 import { Institution } from '../institution/institution.entity.js';
-import { Appeal } from '../appeal/appeal.entity.js';
-
+import { User } from '../user/user.entity.js';
 @Entity()
 export class Professor extends BaseEntity {
-  @Property({ nullable: false })
-  name!: string;
+  @OneToOne(() => User, (user) => user.professorProfile, { nullable: false })
+  user!: Rel<User>;
 
-  @Property({ nullable: false })
-  surname!: string;
-
-  @Property({ nullable: false })
-  mail!: string;
-
-  @Property({ nullable: true })
-  profile_picture!: string;
-
-  @Property({ nullable: false })
+  @Property({ nullable: false, default: 'pending' })
   state!: string;
 
-  @OneToMany(() => Course, (course) => course.professor, {
-    cascade: [Cascade.ALL],
-  })
+  @OneToMany(() => Course, (course) => course.professor)
   courses = new Collection<Course>(this);
 
   @ManyToOne(() => Institution, { nullable: true })
   institution?: Rel<Institution>;
-
-  @OneToMany(() => Appeal, (appeal) => appeal.professor, {
-    cascade: [Cascade.ALL],
-  })
-  appeal = new Collection<Appeal>(this);
-
 }
