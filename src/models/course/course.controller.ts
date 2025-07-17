@@ -1,9 +1,11 @@
 import { NextFunction, Request, Response } from 'express';
 import { Course } from './course.entity.js';
 import { orm } from '../../shared/db/orm.js';
+import { CourseService } from './course.services.js';
 
 // em : EntityManager
 const em = orm.em;
+const courseService = new CourseService(orm.em);
 
 const sanitizedCourseInput = (
   req: Request,
@@ -29,13 +31,8 @@ const sanitizedCourseInput = (
 
 async function findAll(req: Request, res: Response) {
   try {
-    const courses = await em.find(
-      Course,
-      {},
-      {
-        populate: ['courseType', 'professor', 'students'],
-      }
-    );
+    const courses = await courseService.findAll();
+
     res.status(200).json({
       message: 'Courses found',
       data: courses,
@@ -50,13 +47,7 @@ async function findAll(req: Request, res: Response) {
 async function findOne(req: Request, res: Response) {
   try {
     const id = req.params.id;
-    const course = await em.findOneOrFail(
-      Course,
-      { id },
-      {
-        populate: ['courseType', 'professor', 'students'],
-      }
-    );
+    const course = await courseService.findOne(id);
     res.status(200).json({
       message: 'Course found',
       data: course,
@@ -70,8 +61,7 @@ async function findOne(req: Request, res: Response) {
 
 async function add(req: Request, res: Response) {
   try {
-    const course = em.create(Course, req.body.sanitizedInput);
-    await em.flush();
+    const course = await courseService.create(req.body.sanitizedInput);
     res.status(201).json({
       message: 'Course created',
       data: course,
@@ -86,9 +76,7 @@ async function add(req: Request, res: Response) {
 async function update(req: Request, res: Response) {
   try {
     const id = req.params.id;
-    const courseToUpdate = await em.findOneOrFail(Course, { id });
-    em.assign(courseToUpdate, req.body.sanitizedInput);
-    await em.flush();
+    const courseToUpdate = await courseService.update(id, req.body.sanitizedInput);
     res.status(200).json({
       message: 'Course updated',
       data: courseToUpdate,
@@ -103,8 +91,7 @@ async function update(req: Request, res: Response) {
 async function remove(req: Request, res: Response) {
   try {
     const id = req.params.id;
-    const course = em.getReference(Course, id);
-    await em.removeAndFlush(course);
+    const course = await courseService.remove(id);
     res.status(200).json({
       message: 'Course deleted',
     });
