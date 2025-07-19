@@ -17,7 +17,7 @@ export class AuthService {
   ): Promise<User> {
     
     // (1) Check if the user already exists
-    const existingUser = await this.em.findOne(User, { mail: userData.mail });
+    const existingUser = await this.em.findOne(User, { mail: userData.mail }); 
     if (existingUser) {
       throw new Error('Email already used');
     }
@@ -32,7 +32,9 @@ export class AuthService {
 
     // (3) Create a new user
     const newUser = this.em.create(User, {
-      ...userData,
+      name: userData.name,
+      surname: userData.surname,
+      mail: userData.mail,
       password: hashedPassword,
       role: UserRole.STUDENT,
     });
@@ -42,7 +44,7 @@ export class AuthService {
 
     // Check if this is needed
     newUser.studentProfile = newStudentProfile;
-    newStudentProfile.user = newUser;
+    //newStudentProfile.user = newUser;
     
     // (5) Persist the new user and student profile
     await this.em.persistAndFlush([newUser, newStudentProfile])
@@ -77,6 +79,4 @@ export class AuthService {
     delete (user as Partial<User>).password; // Remove password from the response
     return { user, token };
   }
-
-
 }

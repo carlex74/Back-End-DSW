@@ -38,4 +38,4 @@ Content-Type: application/json
 }
 
 ###Borrar un profesor
-DELETE http://localhost:3000/api/professors/686d7aba79055003b0ee7833
+DELETE http://localhost:3000/api/professors/686d8986b5844246c6494e31

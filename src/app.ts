@@ -8,9 +8,15 @@ import { appealRouter } from './models/appeal/appeal.routes.js'
 import { orm, syncSchema } from './shared/db/orm.js'
 import { RequestContext } from '@mikro-orm/core'
 import { authRouter } from './auth/auth.routes.js'
+import cors from 'cors';
 
 const app = express();
+
+app.use(cors({origin: 'http://localhost:5173'}));
+
 app.use(express.json());
+
+app.use(express.urlencoded({ extended: true }));
 
 app.use((req, res, next) => {
   RequestContext.create(orm.em, next); //em is the EntityManager
