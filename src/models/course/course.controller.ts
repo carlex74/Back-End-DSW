@@ -76,7 +76,10 @@ async function add(req: Request, res: Response) {
 async function update(req: Request, res: Response) {
   try {
     const id = req.params.id;
-    const courseToUpdate = await courseService.update(id, req.body.sanitizedInput);
+    const courseToUpdate = await courseService.update(
+      id,
+      req.body.sanitizedInput
+    );
     res.status(200).json({
       message: 'Course updated',
       data: courseToUpdate,

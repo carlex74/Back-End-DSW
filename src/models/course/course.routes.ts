@@ -1,11 +1,18 @@
-import {Router} from 'express'
-import { sanitizedCourseInput, findAll, findOne, add, update, remove } from "./course.controller.js"
+// src/course/course.routes.ts
 
-export const courseRouter = Router()
+import { Router } from 'express';
+import { findAll, findOne, add, update, remove } from './course.controller.js';
+import { validationMiddleware } from '../../shared/middlewares/validate.middleware.js';
+import {
+  CreateCourseSchema,
+  UpdateCourseSchema,
+} from './schemas/course.schemas.js';
 
-courseRouter.get('/', findAll)
-courseRouter.get('/:id', findOne)
-courseRouter.post('/', sanitizedCourseInput, add)
-courseRouter.put('/:id', sanitizedCourseInput, update);
-courseRouter.patch('/:id', sanitizedCourseInput, update);
+export const courseRouter = Router();
+
+courseRouter.get('/', findAll);
+courseRouter.get('/:id', findOne);
 courseRouter.delete('/:id', remove);
+courseRouter.post('/', validationMiddleware(CreateCourseSchema), add);
+courseRouter.put('/:id', validationMiddleware(UpdateCourseSchema), update);
+courseRouter.patch('/:id', validationMiddleware(UpdateCourseSchema), update);
