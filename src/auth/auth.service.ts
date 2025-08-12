@@ -55,7 +55,7 @@ export class AuthService {
     }
 
   
-  public async login(credentials: { mail: string; password_plaintext: string }): Promise<{ user: User; token: string }> {
+  public async login(credentials: { mail: string; password_plaintext: string }): Promise<{ token: string }> {
     
     const user = await this.em.findOne(User, { mail: credentials.mail });
   
@@ -77,6 +77,6 @@ export class AuthService {
     })
 
     delete (user as Partial<User>).password; // Remove password from the response
-    return { user, token };
+    return { token };
   }
 }
