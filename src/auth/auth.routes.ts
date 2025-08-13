@@ -1,7 +1,9 @@
 import { Router } from 'express';
-import { register, login } from "./auth.controller.js"
+import { register, login, getProfile } from './auth.controller.js';
+import { authMiddleware } from './auth.middleware.js';
 
-export const authRouter = Router()
+export const authRouter = Router();
 
-authRouter.post('/register', register)
-authRouter.post('/login', login)
+authRouter.post('/register', register);
+authRouter.post('/login', login);
+authRouter.get('/profile', authMiddleware, getProfile);

@@ -1,11 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
 import { BaseSchema, safeParse, flatten, BaseIssue } from 'valibot';
-import { HttpResponse } from '../response/http.response';
+import { HttpResponse } from '../response/http.response.js';
 
 export const validationMiddleware = <TInput, TOutput>(
   schema: BaseSchema<TInput, TOutput, BaseIssue<TInput>>
 ) => {
-
   return (req: Request, res: Response, next: NextFunction) => {
     const result = safeParse(schema, req.body);
 

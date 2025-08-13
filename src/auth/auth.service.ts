@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import { User, UserRole } from '../models/user/user.entity.js';
 import { Student } from '../models/student/student.entity.js';
 
-
+// Service for authentication logic
 export class AuthService {
   private em: EntityManager;
 
@@ -12,25 +12,23 @@ export class AuthService {
     this.em = em;
   }
 
+  // Registers a new user and creates their student profile
   public async register(
     userData: Omit<User, 'password'> & { password_plaintext: string }
   ): Promise<User> {
-    
-    // (1) Check if the user already exists
-    const existingUser = await this.em.findOne(User, { mail: userData.mail }); 
+    // Check if email is already used
+    const existingUser = await this.em.findOne(User, { mail: userData.mail });
     if (existingUser) {
       throw new Error('Email already used');
     }
-
-    // (2) Hash the password using bcrypt
+    // Hash the password before saving
     const SALT_ROUNDS = 10;
-    
     const hashedPassword = await bcrypt.hash(
       userData.password_plaintext,
       SALT_ROUNDS
     );
 
-    // (3) Create a new user
+    // Create new user and student profile
     const newUser = this.em.create(User, {
       name: userData.name,
       surname: userData.surname,
@@ -39,44 +37,55 @@ export class AuthService {
       role: UserRole.STUDENT,
     });
 
-    // (4) Create a new student profile
-    const newStudentProfile = this.em.create(Student, { user: newUser })
-
-    // Check if this is needed
+    const newStudentProfile = this.em.create(Student, { user: newUser });
     newUser.studentProfile = newStudentProfile;
-    //newStudentProfile.user = newUser;
-    
-    // (5) Persist the new user and student profile
-    await this.em.persistAndFlush([newUser, newStudentProfile])
 
-    // (6) Return the new user without the password
-    delete (newUser as Partial<User>).password; // Remove password from the response
+    // Save both user and profile
+    await this.em.persistAndFlush([newUser, newStudentProfile]);
+
+    // Remove password before returning user
+    delete (newUser as Partial<User>).password;
     return newUser;
-    }
+  }
 
-  
-  public async login(credentials: { mail: string; password_plaintext: string }): Promise<{ token: string }> {
-    
+  // Logs in a user and returns a JWT token
+  public async login(credentials: {
+    mail: string;
+    password_plaintext: string;
+  }): Promise<{ token: string }> {
+    // Find user by email
     const user = await this.em.findOne(User, { mail: credentials.mail });
-  
+
     if (!user) {
-      throw new Error('Invalid email or password');
+      throw new Error('Credenciales inválidas.');
     }
 
-    const isPasswordValid = await bcrypt.compare(credentials.password_plaintext, user.password)
-  
-    if( !isPasswordValid) {
-      throw new Error('Invalid email or password');
+    // Check if password matches
+    const isPasswordValid = await bcrypt.compare(
+      credentials.password_plaintext,
+      user.password
+    );
+
+    if (!isPasswordValid) {
+      throw new Error('Credenciales inválidas.');
     }
 
-    const payload = { id: user.id , role: user.role }; // Create a payload with user ID and role. Payload could change in the future.
+    // Create JWT token with user info
+    const payload = { id: user.id, role: user.role };
+    const JWT_SECRET = process.env.JWT_SECRET || 'DEFAULT_SECRET';
+    const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '24h' });
 
-
-    const token = jwt.sign(payload, process.env.JWT_SECRET || 'DEFAULT_SECRET', {
-      expiresIn: '24h',
-    })
-
-    delete (user as Partial<User>).password; // Remove password from the response
     return { token };
+  }
+
+  // Gets user profile by ID
+  public async getProfile(userId: string): Promise<User | null> {
+    const user = await this.em.findOne(User, { id: userId });
+
+    if (!user) return null;
+
+    // Remove password before returning user
+    delete (user as Partial<User>).password;
+    return user;
   }
 }
