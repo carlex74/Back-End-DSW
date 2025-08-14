@@ -1,11 +1,13 @@
 import {Router} from 'express'
-import { sanitizedAppealInput, findAll, findOne, add, update, remove } from "./appeal.controller.js"
+import { findAll, findOne, add, update, remove } from "./appeal.controller.js"
+import { validationMiddleware } from '../../shared/middlewares/validate.middleware.js'
+import { CreateAppealSchema, UpdateAppealSchema } from './appeal.schemas.js'
 
 export const appealRouter = Router()
 
 appealRouter.get('/', findAll)
 appealRouter.get('/:id', findOne)
-appealRouter.post('/', sanitizedAppealInput, add)
-appealRouter.put('/:id', sanitizedAppealInput, update)
-appealRouter.patch('/:id', sanitizedAppealInput, update)
+appealRouter.post('/', validationMiddleware(CreateAppealSchema), add)
+appealRouter.put('/:id', validationMiddleware(UpdateAppealSchema), update)
+appealRouter.patch('/:id', validationMiddleware(UpdateAppealSchema), update)
 appealRouter.delete('/:id', remove)
