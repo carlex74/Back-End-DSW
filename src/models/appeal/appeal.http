@@ -1,8 +1,9 @@
 ###Obtener todas las aplicaciones
 GET http://localhost:3000/api/appeals
 
+
 ###Obtener una aplicación
-GET http://localhost:3000/api/appeals/686d7b8bf7d49658c6656a69
+GET http://localhost:3000/api/appeals/689df8f44148ea580cc465f5
 
 
 ###Crear una aplicación - rápido
@@ -13,17 +14,17 @@ Content-Type: application/json
 {
     "date": "{{createdAt}}",
     "text": "Quiero que me acepten la solicitud porfis",
-    "professor": "686d7b83f7d49658c6656a68"
+    "student": "689dee4a65944b53fdb78ed9"
 }
 
 
 ###Modificar una aplicación existente (PATCH)
-PATCH http://localhost:3000/api/appeals/
+PATCH http://localhost:3000/api/appeals/689df8f44148ea580cc465f5
 Content-Type: application/json
 
 {
-    "state": "accepted",
+    "state": "accepted"
 }
 
 ###Borrar una aplicación
-DELETE http://localhost:3000/api/appeals/686d7e6d21ec45ac5aac7568
+DELETE http://localhost:3000/api/appeals/689df8f44148ea580cc465f5
