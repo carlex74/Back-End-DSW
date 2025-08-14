@@ -2,26 +2,6 @@ import { NextFunction, Request, Response } from 'express';
 import { orm } from '../../shared/db/orm.js';
 import { AppealService } from './appeal.service.js';
 
-const sanitizedAppealInput = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  req.body.sanitizedInput = {
-    date: req.body.date,
-    text: req.body.text,
-    state: req.body.state,
-    student: req.body.student,
-  };
-
-  Object.keys(req.body.sanitizedInput).forEach((key) => {
-    if (req.body.sanitizedInput[key] === undefined) {
-      delete req.body.sanitizedInput[key];
-    }
-  });
-  next();
-};
-
 async function findAll(req: Request, res: Response) {
   try {
     const appealService = new AppealService(orm.em.fork());
@@ -57,8 +37,9 @@ async function add(req: Request, res: Response) {
   try {
     const appealService = new AppealService(orm.em.fork());
     const appealData = {
-      ...req.body.sanitizedInput,
+      ...req.body,
       state: 'pending',
+      date: new Date(),
     };
 
     const appeal = await appealService.create(appealData);
@@ -79,7 +60,7 @@ async function update(req: Request, res: Response) {
     const id = req.params.id;
     const appealToUpdate = await appealService.update(
       id,
-      req.body.sanitizedInput
+      req.body
     );
     res.status(200).json({
       message: 'Application updated',
@@ -105,4 +86,4 @@ async function remove(req: Request, res: Response) {
   }
 }
 
-export { sanitizedAppealInput, findAll, findOne, add, update, remove };
+export { findAll, findOne, add, update, remove };
