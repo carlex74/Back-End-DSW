@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from 'express';
+import { Request, Response } from 'express';
 import { orm } from '../../shared/db/orm.js';
 import { AppealService } from './appeal.service.js';
 
@@ -36,8 +36,12 @@ async function findOne(req: Request, res: Response) {
 async function add(req: Request, res: Response) {
   try {
     const appealService = new AppealService(orm.em.fork());
+
+    const user = (req as Request & {user: {id: string; role: string}}).user
+
     const appealData = {
-      ...req.body,
+      text: req.body.text,
+      user: user.id,
       state: 'pending',
       date: new Date(),
     };

@@ -19,7 +19,7 @@ export class AppealService {
       Appeal,
       {},
       {
-        populate: ['student'],
+        populate: ['user'],
       }
     );
   }
@@ -29,7 +29,7 @@ export class AppealService {
       Appeal,
       { id },
       {
-        populate: ['student'],
+        populate: ['user'],
       }
     );
   }
