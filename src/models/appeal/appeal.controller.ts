@@ -1,9 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
-import { Appeal } from './appeal.entity.js';
 import { orm } from '../../shared/db/orm.js';
-
-// em : EntityManager
-const em = orm.em;
+import { AppealService } from './appeal.service.js';
 
 const sanitizedAppealInput = (
   req: Request,
@@ -13,7 +10,8 @@ const sanitizedAppealInput = (
   req.body.sanitizedInput = {
     date: req.body.date,
     text: req.body.text,
-    professor: req.body.professor,
+    state: req.body.state,
+    student: req.body.student,
   };
 
   Object.keys(req.body.sanitizedInput).forEach((key) => {
@@ -26,13 +24,8 @@ const sanitizedAppealInput = (
 
 async function findAll(req: Request, res: Response) {
   try {
-    const appeals = await em.find(
-      Appeal,
-      {},
-      {
-        populate: ['professor'],
-      }
-    );
+    const appealService = new AppealService(orm.em.fork());
+    const appeals = await appealService.findAll();
     res.status(200).json({
       message: 'Application found',
       data: appeals,
@@ -46,17 +39,12 @@ async function findAll(req: Request, res: Response) {
 
 async function findOne(req: Request, res: Response) {
   try {
+    const appealService = new AppealService(orm.em.fork());
     const id = req.params.id;
-    const appeals = await em.findOneOrFail(
-      Appeal,
-      { id },
-      {
-        populate: ['professor'],
-      }
-    );
+    const appeal = await appealService.findOne(id);
     res.status(200).json({
       message: 'Application found',
-      data: appeals,
+      data: appeal,
     });
   } catch (error: any) {
     res.status(500).json({
@@ -67,17 +55,16 @@ async function findOne(req: Request, res: Response) {
 
 async function add(req: Request, res: Response) {
   try {
-    
+    const appealService = new AppealService(orm.em.fork());
     const appealData = {
       ...req.body.sanitizedInput,
       state: 'pending',
     };
 
-    const appeals = em.create(Appeal, appealData);
-    await em.flush();
+    const appeal = await appealService.create(appealData);
     res.status(201).json({
       message: 'Application created',
-      data: appeals,
+      data: appeal,
     });
   } catch (error: any) {
     res.status(500).json({
@@ -88,10 +75,12 @@ async function add(req: Request, res: Response) {
 
 async function update(req: Request, res: Response) {
   try {
+    const appealService = new AppealService(orm.em.fork());
     const id = req.params.id;
-    const appealToUpdate = await em.findOneOrFail(Appeal, { id });
-    em.assign(appealToUpdate, req.body.sanitizedInput);
-    await em.flush();
+    const appealToUpdate = await appealService.update(
+      id,
+      req.body.sanitizedInput
+    );
     res.status(200).json({
       message: 'Application updated',
       data: appealToUpdate,
@@ -105,9 +94,9 @@ async function update(req: Request, res: Response) {
 
 async function remove(req: Request, res: Response) {
   try {
+    const appealService = new AppealService(orm.em.fork());
     const id = req.params.id;
-    const appeals = em.getReference(Appeal, id);
-    await em.removeAndFlush(appeals);
+    await appealService.remove(id);
     res.status(200).json({
       message: 'Application deleted',
     });
