@@ -5,11 +5,6 @@ export const CreateAppealSchema = v.object({
     v.string('El texto de la apelación debe ser un string.'),
     v.minLength(10, 'La apelación debe tener al menos 10 caracteres.')
   ),
-
-  student: v.pipe(
-    v.string('El ID del estudiante es requerido.'),
-    v.minLength(1, 'El ID del estudiante no puede estar vacío.')
-  ),
 });
 
 export const UpdateAppealSchema = v.object({

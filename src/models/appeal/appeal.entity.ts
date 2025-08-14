@@ -18,9 +18,6 @@ export class Appeal extends BaseEntity {
   @Property({ nullable: false, default: 'pending' })
   state!: string;
 
-  @ManyToOne(() => Student, { nullable: false })
-  student!: Rel<Student>;
-
-  @ManyToOne(() => User, { nullable: true })
-  user?: Rel<User>;
+  @ManyToOne(() => User, { nullable: false })
+  user!: Rel<User>;
 }
