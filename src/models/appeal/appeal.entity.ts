@@ -2,9 +2,6 @@ import { Entity, Property, ManyToOne, Rel } from '@mikro-orm/core';
 import { BaseEntity } from '../../shared/db/baseEntity.entity.js';
 import { User } from '../user/user.entity.js';
 
-/**
- * Para que un estudiante pase a ser profesor
- */
 @Entity()
 export class Appeal extends BaseEntity {
   @Property({ nullable: false })

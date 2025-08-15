@@ -1,5 +1,3 @@
-// src/models/appeal/appeal.controller.ts
-
 import { Request, Response } from 'express';
 import { orm } from '../../shared/db/orm.js';
 import { AppealService } from './appeal.service.js';
@@ -8,11 +6,12 @@ import { HttpResponse } from '../../shared/response/http.response.js';
 async function add(req: Request, res: Response) {
   try {
     const appealService = new AppealService(orm.em.fork());
-
-    const userId = req.user!.id;
+    const userId = req.user?.id;
+    if (!userId) {
+      return HttpResponse.Unauthorized(res, 'User ID not found in token');
+    }
 
     const cvPath = req.file?.path;
-
     const appealData = req.body;
 
     const newAppeal = await appealService.create(appealData, userId, cvPath);
@@ -38,6 +37,7 @@ async function findOne(req: Request, res: Response) {
     const appealService = new AppealService(orm.em.fork());
     const id = req.params.id;
     const appeal = await appealService.findOne(id);
+
     if (!appeal) {
       return HttpResponse.NotFound(res, 'Appeal not found');
     }
