@@ -17,7 +17,7 @@ export class Appeal extends BaseEntity {
   experienceMotivation!: string;
 
   @Property({ nullable: true })
-  cvPath?: string;
+  documentUrl?: string;
 
   @ManyToOne(() => User, { nullable: false })
   user!: Rel<User>;

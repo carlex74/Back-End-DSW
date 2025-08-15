@@ -11,10 +11,14 @@ async function add(req: Request, res: Response) {
       return HttpResponse.Unauthorized(res, 'User ID not found in token');
     }
 
-    const cvPath = req.file?.path;
+    const documentPath = req.file?.path;
     const appealData = req.body;
 
-    const newAppeal = await appealService.create(appealData, userId, cvPath);
+    const newAppeal = await appealService.create(
+      appealData,
+      userId,
+      documentPath
+    );
 
     return HttpResponse.Created(res, newAppeal);
   } catch (error: any) {

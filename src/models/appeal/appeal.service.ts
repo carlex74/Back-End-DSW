@@ -13,14 +13,14 @@ export class AppealService {
   public async create(
     appealInput: CreateAppealType,
     userId: string,
-    cvPath?: string
+    documentPath?: string
   ): Promise<Appeal> {
     const appeal = this.em.create(Appeal, {
       ...appealInput,
       date: new Date(),
       state: 'pending',
       user: this.em.getReference(User, userId),
-      cvPath: cvPath,
+      documentUrl: documentPath,
     });
 
     await this.em.flush();
