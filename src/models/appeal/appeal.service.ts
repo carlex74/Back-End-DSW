@@ -1,5 +1,7 @@
 import { EntityManager } from '@mikro-orm/core';
 import { Appeal } from './appeal.entity.js';
+import { CreateAppealType } from './appeal.schemas.js';
+import { User } from '../user/user.entity.js';
 
 export class AppealService {
   private em: EntityManager;
@@ -8,30 +10,30 @@ export class AppealService {
     this.em = em;
   }
 
-  public async create(appealData: any): Promise<Appeal> {
-    const appeal = this.em.create(Appeal, appealData);
+  public async create(
+    appealInput: CreateAppealType,
+    userId: string,
+    cvPath?: string
+  ): Promise<Appeal> {
+    const appeal = this.em.create(Appeal, {
+      ...appealInput,
+      date: new Date(),
+      state: 'pending',
+      user: this.em.getReference(User, userId),
+      cvPath: cvPath,
+    });
+
     await this.em.flush();
+
     return appeal;
   }
 
   public async findAll(): Promise<Appeal[]> {
-    return this.em.find(
-      Appeal,
-      {},
-      {
-        populate: ['student'],
-      }
-    );
+    return this.em.find(Appeal, {}, { populate: ['user'] });
   }
 
-  public async findOne(id: string): Promise<Appeal> {
-    return this.em.findOneOrFail(
-      Appeal,
-      { id },
-      {
-        populate: ['student'],
-      }
-    );
+  public async findOne(id: string): Promise<Appeal | null> {
+    return this.em.findOne(Appeal, { id }, { populate: ['user'] });
   }
 
   public async update(
