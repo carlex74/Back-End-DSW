@@ -1,9 +1,17 @@
 import * as v from 'valibot';
 
 export const CreateAppealSchema = v.object({
-  text: v.pipe(
-    v.string('El texto de la apelación debe ser un string.'),
-    v.minLength(10, 'La apelación debe tener al menos 10 caracteres.')
+  expertise: v.pipe(
+    v.string('El área de especialización debe ser un texto.'),
+    v.minLength(1, 'El área de especialización no puede estar vacía.')
+  ),
+  
+  experienceMotivation: v.pipe(
+    v.string('La experiencia y motivación debe ser un texto.'),
+    v.minLength(
+      20,
+      'Por favor, detalla tu experiencia en al menos 20 caracteres.'
+    )
   ),
 });
 

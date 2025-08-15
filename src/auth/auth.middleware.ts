@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { HttpResponse } from '../shared/response/http.response.js';
+import { UserRole } from '../models/user/user.entity.js';
 
 // Middleware to check if the user is authenticated using JWT
 export const authMiddleware = (
@@ -30,7 +31,7 @@ export const authMiddleware = (
     // Verify the token and get user data
     const decodedPayload = jwt.verify(token, JWT_SECRET) as {
       id: string;
-      role: string;
+      role: UserRole;
     };
     // Attach user info to request
     authReq.user = decodedPayload;

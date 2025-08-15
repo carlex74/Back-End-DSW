@@ -1,19 +1,38 @@
 import { Request, Response } from 'express';
 import { orm } from '../../shared/db/orm.js';
 import { AppealService } from './appeal.service.js';
+import { HttpResponse } from '../../shared/response/http.response.js';
+
+async function add(req: Request, res: Response) {
+  try {
+    const appealService = new AppealService(orm.em.fork());
+    const userId = req.user?.id;
+    if (!userId) {
+      return HttpResponse.Unauthorized(res, 'User ID not found in token');
+    }
+
+    const documentPath = req.file?.path;
+    const appealData = req.body;
+
+    const newAppeal = await appealService.create(
+      appealData,
+      userId,
+      documentPath
+    );
+
+    return HttpResponse.Created(res, newAppeal);
+  } catch (error: any) {
+    return HttpResponse.InternalServerError(res, error.message);
+  }
+}
 
 async function findAll(req: Request, res: Response) {
   try {
     const appealService = new AppealService(orm.em.fork());
     const appeals = await appealService.findAll();
-    res.status(200).json({
-      message: 'Application found',
-      data: appeals,
-    });
+    return HttpResponse.Ok(res, appeals);
   } catch (error: any) {
-    res.status(500).json({
-      message: error.message,
-    });
+    return HttpResponse.InternalServerError(res, error.message);
   }
 }
 
@@ -22,39 +41,13 @@ async function findOne(req: Request, res: Response) {
     const appealService = new AppealService(orm.em.fork());
     const id = req.params.id;
     const appeal = await appealService.findOne(id);
-    res.status(200).json({
-      message: 'Application found',
-      data: appeal,
-    });
+
+    if (!appeal) {
+      return HttpResponse.NotFound(res, 'Appeal not found');
+    }
+    return HttpResponse.Ok(res, appeal);
   } catch (error: any) {
-    res.status(500).json({
-      message: error.message,
-    });
-  }
-}
-
-async function add(req: Request, res: Response) {
-  try {
-    const appealService = new AppealService(orm.em.fork());
-
-    const user = (req as Request & {user: {id: string; role: string}}).user
-
-    const appealData = {
-      text: req.body.text,
-      user: user.id,
-      state: 'pending',
-      date: new Date(),
-    };
-
-    const appeal = await appealService.create(appealData);
-    res.status(201).json({
-      message: 'Application created',
-      data: appeal,
-    });
-  } catch (error: any) {
-    res.status(500).json({
-      message: error.message,
-    });
+    return HttpResponse.InternalServerError(res, error.message);
   }
 }
 
@@ -62,18 +55,10 @@ async function update(req: Request, res: Response) {
   try {
     const appealService = new AppealService(orm.em.fork());
     const id = req.params.id;
-    const appealToUpdate = await appealService.update(
-      id,
-      req.body
-    );
-    res.status(200).json({
-      message: 'Application updated',
-      data: appealToUpdate,
-    });
+    const updatedAppeal = await appealService.update(id, req.body);
+    return HttpResponse.Ok(res, updatedAppeal);
   } catch (error: any) {
-    res.status(500).json({
-      message: error.message,
-    });
+    return HttpResponse.InternalServerError(res, error.message);
   }
 }
 
@@ -82,11 +67,9 @@ async function remove(req: Request, res: Response) {
     const appealService = new AppealService(orm.em.fork());
     const id = req.params.id;
     await appealService.remove(id);
-    res.status(200).json({
-      message: 'Application deleted',
-    });
+    return HttpResponse.Ok(res, { message: 'Appeal deleted successfully' });
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    return HttpResponse.InternalServerError(res, error.message);
   }
 }
 
