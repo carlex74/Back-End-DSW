@@ -5,6 +5,7 @@ import { CreateAppealSchema, UpdateAppealSchema } from './appeal.schemas.js'
 import { authMiddleware } from '../../auth/auth.middleware.js'
 import { uploadCvToCloudinary } from '../../shared/middlewares/file-upload.middleware.js'
 
+
 export const appealRouter = Router()
 
 appealRouter.use(authMiddleware)

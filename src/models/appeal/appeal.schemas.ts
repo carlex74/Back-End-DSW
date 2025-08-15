@@ -5,6 +5,7 @@ export const CreateAppealSchema = v.object({
     v.string('El área de especialización debe ser un texto.'),
     v.minLength(1, 'El área de especialización no puede estar vacía.')
   ),
+  
   experienceMotivation: v.pipe(
     v.string('La experiencia y motivación debe ser un texto.'),
     v.minLength(

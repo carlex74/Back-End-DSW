@@ -18,7 +18,7 @@ export class Appeal extends BaseEntity {
 
   @Property({ nullable: true })
   documentUrl?: string;
-
+  
   @ManyToOne(() => User, { nullable: false })
   user!: Rel<User>;
 }

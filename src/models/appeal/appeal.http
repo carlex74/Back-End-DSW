@@ -1,29 +1,33 @@
+//Este token es el de Pepe Argento y se uso para validar que las rutas fueron debidamente protegidas
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4OWQzNzcwMDMwNWRkOGI1NDA4OWM4ZCIsInJvbGUiOiJzdHVkZW50IiwiaWF0IjoxNzU1MTk1MTMwLCJleHAiOjE3NTUyODE1MzB9.atLftVzM-mMLvj-6TroyrOH4FkNXOCT0neMeYu35yrc
+
 ###Obtener todas las aplicaciones
 GET http://localhost:3000/api/appeals
-
+Authorization: Bearer {{token}}
 
 ###Obtener una aplicación
 GET http://localhost:3000/api/appeals/689e15eb630aa739c3d58cb9
-
+Authorization: Bearer {{token}}
 
 ###Crear una aplicación - rápido
-@createdAt = {{$datetime iso8601}}
 POST http://localhost:3000/api/appeals
 Content-Type: application/json
+Authorization: Bearer {{token}}
 
 {
-    "text": "Quiero que me acepten la solicitud porfis",
-    "student": "689dee4a65944b53fdb78ed9"
+    "text": "Quiero que me acepten la solicitud porfis"
 }
 
 
 ###Modificar una aplicación existente (PATCH)
-PATCH http://localhost:3000/api/appeals/689e15eb630aa739c3d58cb9
+PATCH http://localhost:3000/api/appeals/689e2a19c154d0575d785562
 Content-Type: application/json
+Authorization: Bearer {{token}}
 
 {
     "state": "accepted"
 }
 
 ###Borrar una aplicación
-DELETE http://localhost:3000/api/appeals/689e15eb630aa739c3d58cb9
+DELETE http://localhost:3000/api/appeals/689e2a19c154d0575d785562
+Authorization: Bearer {{token}}
