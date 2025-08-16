@@ -1,9 +1,10 @@
 ---
-name: '🚀 Nueva Funcionalidad'
-description: 'Sugiere una nueva idea, mejora o característica para el proyecto.'
+name: "\U0001F680 Nueva Funcionalidad"
+about: Crea una nueva funcionalidad para la aplicación.
 title: 'feat: [Título conciso de la funcionalidad]'
-labels: ['feature', 'needs-triage']
+labels: feature, needs-triage
 assignees: ''
+
 ---
 
 ### Descripción
