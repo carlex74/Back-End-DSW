@@ -1,8 +1,9 @@
 import { CourseType } from './courseType.entity.js';
 import { NextFunction, Request, Response } from 'express';
 import { orm } from '../../shared/db/orm.js';
+import { CourseTypeService } from './courseType.services.js';
 
-const em = orm.em;
+const courseTypeService = new CourseTypeService(orm.em);
 
 const sanitizedCourseTypeInput = (
   req: Request,
@@ -24,7 +25,7 @@ const sanitizedCourseTypeInput = (
 
 async function findAll(req: Request, res: Response) {
   try {
-    const courseType = await em.find(CourseType, {});
+    const courseType = await courseTypeService.findAll();
     res
       .status(200)
       .json({ message: 'found all course types', data: courseType });
@@ -36,7 +37,7 @@ async function findAll(req: Request, res: Response) {
 async function findOne(req: Request, res: Response) {
   try {
     const id = req.params.id;
-    const courseType = await em.findOneOrFail(CourseType, { id });
+    const courseType = await courseTypeService.findOne(id);
     res.status(200).json({ message: 'found course type', data: courseType });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
@@ -45,8 +46,7 @@ async function findOne(req: Request, res: Response) {
 
 async function add(req: Request, res: Response) {
   try {
-    const courseType = em.create(CourseType, req.body);
-    await em.flush();
+    const courseType = courseTypeService.create(req.body.sanitizedInput);
     res.status(201).json({ message: 'course type created', data: courseType });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
@@ -56,10 +56,8 @@ async function add(req: Request, res: Response) {
 async function update(req: Request, res: Response) {
   try {
     const id = req.params.id;
-    const courseType = em.getReference(CourseType, id);
-    em.assign(courseType, req.body);
-    await em.flush();
-    res.status(200).json({ message: 'course type updated' });
+    const courseType = await courseTypeService.update(id, req.body.sanitizedInput);
+    res.status(200).json({ message: 'course type updated', data: courseType });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
@@ -68,8 +66,8 @@ async function update(req: Request, res: Response) {
 async function remove(req: Request, res: Response) {
   try {
     const id = req.params.id;
-    const courseType = em.getReference(CourseType, id);
-    await em.removeAndFlush(courseType);
+    const courseType = courseTypeService.remove(id);
+   
     res.status(200).send({ message: 'course type deleted' });
   } catch (error: any) {
     res.status(500).json({ message: error.message });

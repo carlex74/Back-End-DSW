@@ -9,9 +9,11 @@ on:
 jobs:
   create_pull_request:
     runs-on: ubuntu-latest
+    permissions:             # 👈 Esto es lo que te falta
+      contents: write
+      pull-requests: write
     steps:
       # Paso 1: Descargar el código.
-      # fetch-depth: 0 es crucial para tener todo el historial y evitar problemas.
       - name: Checkout Code
         uses: actions/checkout@v4
         with:
@@ -20,7 +22,6 @@ jobs:
       # Paso 2: Crear el Pull Request usando la CLI oficial de GitHub
       - name: Create Pull Request
         env:
-          # El token de GitHub se pasa como una variable de entorno segura.
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           # 1. Define a todo el equipo en una lista (array de bash)
@@ -33,7 +34,6 @@ jobs:
           FINAL_REVIEWERS=""
           for reviewer in "${ALL_REVIEWERS[@]}"; do
             if [[ "$reviewer" != "$PR_AUTHOR" ]]; then
-              # Si la lista final no está vacía, añade una coma primero
               if [[ -n "$FINAL_REVIEWERS" ]]; then
                 FINAL_REVIEWERS+=",${reviewer}"
               else
@@ -45,13 +45,9 @@ jobs:
           echo "Autor del PR: ${PR_AUTHOR}"
           echo "Revisores finales asignados: ${FINAL_REVIEWERS}"
 
-          # Le decimos a la CLI que la rama base es 'develop'
           BASE_BRANCH="develop"
-
-          # Obtenemos el nombre de nuestra rama feature (ej: 'feature/mi-trabajo')
           HEAD_BRANCH="${{ github.ref_name }}"
 
-          # Creamos un título y cuerpo para el PR
           TITLE="PR: Merge ${HEAD_BRANCH} into ${BASE_BRANCH}"
           BODY="Pull Request automático creado para la rama \`${HEAD_BRANCH}\`. Por favor, revisar."
 
