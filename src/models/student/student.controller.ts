@@ -1,8 +1,9 @@
 import { orm } from '../../shared/db/orm.js';
 import { Student } from './student.entity.js';
 import { Request, Response, NextFunction } from 'express';
+import { StudentService } from './student.services.js';
 
-const em = orm.em;
+const studentService = new StudentService(orm.em);
 
 function sanitizeStudentInput(req: Request, res: Response, next: NextFunction) {
   req.body.sanitizedInput = {
@@ -23,13 +24,7 @@ function sanitizeStudentInput(req: Request, res: Response, next: NextFunction) {
 
 async function findAll(req: Request, res: Response) {
   try {
-    const students = await em.find(
-      Student,
-      {},
-      {
-        populate: ['courses'],
-      }
-    );
+    const students = await studentService.findAll();
     res.status(200).json({ message: 'Found all student', data: students });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
@@ -39,13 +34,7 @@ async function findAll(req: Request, res: Response) {
 async function findOne(req: Request, res: Response) {
   try {
     const id = req.params.id;
-    const students = await em.findOneOrFail(
-      Student,
-      { id },
-      {
-        populate: ['courses'],
-      }
-    );
+    const students = await studentService.findOne(id);
     res.status(200).json({ message: 'Found student', data: students });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
@@ -54,8 +43,7 @@ async function findOne(req: Request, res: Response) {
 
 async function add(req: Request, res: Response) {
   try {
-    const students = em.create(Student, req.body.sanitizedInput);
-    await em.flush();
+    const students = studentService.create(req.body.sanitizedInput);  
     res.status(201).json({ message: 'Student created', data: students });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
@@ -65,9 +53,7 @@ async function add(req: Request, res: Response) {
 async function update(req: Request, res: Response) {
   try {
     const id = req.params.id;
-    const studentToUpdate = await em.findOneOrFail(Student, id);
-    em.assign(studentToUpdate, req.body.sanitizedInput);
-    await em.flush();
+    const studentToUpdate = studentService.update(id, req.body.sanitizedInput);
     res.status(200).json({ message: 'Student updated', data: studentToUpdate });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
@@ -77,8 +63,7 @@ async function update(req: Request, res: Response) {
 async function remove(req: Request, res: Response) {
   try {
     const id = req.params.id;
-    const students = em.getReference(Student, id);
-    await em.removeAndFlush(students);
+    const students = studentService.remove(id);
     res.status(200).send({ message: 'Student deleted' });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
