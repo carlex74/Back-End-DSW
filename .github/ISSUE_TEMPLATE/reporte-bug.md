@@ -1,9 +1,10 @@
 ---
-name: '🐞 Reporte de Bug'
-description: 'Reporta un error o comportamiento inesperado.'
+name: "\U0001F41E Reporte de Bug"
+about: Crea un reporte acerca del bug.
 title: 'fix: [Título conciso del bug]'
-labels: ['bug', 'needs-triage']
+labels: bug, needs-triage
 assignees: ''
+
 ---
 
 ### Describe el Bug
