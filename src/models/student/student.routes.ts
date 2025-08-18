@@ -1,6 +1,5 @@
 import { Router } from 'express';
 import {
-  sanitizeStudentInput,
   findAll,
   findOne,
   add,
