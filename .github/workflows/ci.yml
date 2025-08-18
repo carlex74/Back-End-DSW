@@ -1,0 +1,27 @@
+name: Backend CI Checks
+
+on:
+  pull_request:
+    branches: [ develop ]
+  
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js and pnpm
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install Dependencies
+        run: pnpm install
+
+      - name: Run Quality Checks (Lint, Type-Check, Audit)
+        run: pnpm test
