@@ -1,5 +1,6 @@
 import { MikroORM } from '@mikro-orm/core';
 import { MongoHighlighter } from '@mikro-orm/mongo-highlighter';
+import { MongoDriver } from '@mikro-orm/mongodb';
 import * as dotenv from 'dotenv';
 
 dotenv.config();
@@ -16,12 +17,11 @@ export const orm = await MikroORM.init({
   entities: ['dist/**/*.entity.js'],
   entitiesTs: ['src/**/*.entity.ts'],
   dbName: MONGO_DB_NAME,
-  type: 'mongo',
+  driver: MongoDriver,
   clientUrl: connectionString,
   highlighter: new MongoHighlighter(),
   debug: true,
   schemaGenerator: {
-    // Delete in production
     disableForeignKeys: true,
     createForeignKeyConstraints: true,
     ignoreSchema: [],
