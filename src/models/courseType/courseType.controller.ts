@@ -1,4 +1,3 @@
-import { CourseType } from './courseType.entity.js';
 import { NextFunction, Request, Response } from 'express';
 import { orm } from '../../shared/db/orm.js';
 import { CourseTypeService } from './courseType.services.js';
@@ -66,7 +65,7 @@ async function update(req: Request, res: Response) {
 async function remove(req: Request, res: Response) {
   try {
     const id = req.params.id;
-    const courseType = courseTypeService.remove(id);
+    await courseTypeService.remove(id);
    
     res.status(200).send({ message: 'course type deleted' });
   } catch (error: any) {

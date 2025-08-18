@@ -1,10 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
-import { Course } from './course.entity.js';
 import { orm } from '../../shared/db/orm.js';
 import { CourseService } from './course.services.js';
 
 // em : EntityManager
-const em = orm.em;
 const courseService = new CourseService(orm.em);
 
 const sanitizedCourseInput = (
@@ -94,7 +92,7 @@ async function update(req: Request, res: Response) {
 async function remove(req: Request, res: Response) {
   try {
     const id = req.params.id;
-    const course = await courseService.remove(id);
+    await courseService.remove(id);
     res.status(200).json({
       message: 'Course deleted',
     });

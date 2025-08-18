@@ -1,8 +1,6 @@
-import { Professor } from './professor.entity.js';
 import { Request, Response, NextFunction } from 'express';
 import { orm } from '../../shared/db/orm.js';
 import { ProfessorSevice } from './professor.services.js';
-
 
 const professorService = new ProfessorSevice(orm.em);
 
@@ -62,7 +60,7 @@ async function update(req: Request, res: Response) {
     const id = req.params.id;
     const professor = professorService.update(id, req.body.sanitizedInput);
 
-    res.status(200).json({ message: 'Professor updated',data: professor });
+    res.status(200).json({ message: 'Professor updated', data: professor });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
@@ -71,7 +69,7 @@ async function update(req: Request, res: Response) {
 async function remove(req: Request, res: Response) {
   try {
     const id = req.params.id;
-    const professor = professorService.remove(id);
+    await professorService.remove(id);
     res.status(200).send({ message: 'Professor deleted' });
   } catch (error: any) {
     res.status(500).json({ message: error.message });

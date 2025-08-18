@@ -36,7 +36,7 @@ export const authMiddleware = (
     // Attach user info to request
     authReq.user = decodedPayload;
     next();
-  } catch (error) {
+  } catch {
     // If token is invalid or expired, block access
     return HttpResponse.Unauthorized(res, 'Token inválido o expirado.');
   }
