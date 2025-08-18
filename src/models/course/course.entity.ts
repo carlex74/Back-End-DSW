@@ -4,7 +4,6 @@ import {
   ManyToOne,
   Rel,
   ManyToMany,
-  Cascade,
   Collection,
 } from '@mikro-orm/core';
 import { BaseEntity } from '../../shared/db/baseEntity.entity.js';

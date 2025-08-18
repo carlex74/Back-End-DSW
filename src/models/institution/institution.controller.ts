@@ -1,5 +1,4 @@
 import { orm } from '../../shared/db/orm.js';
-import { Institution } from './institution.entity.js';
 import { Request, Response, NextFunction } from 'express';
 import { InstitutionService } from './institution.services.js';
 
@@ -26,7 +25,9 @@ function sanitizeInstitutionInput(
 async function findAll(req: Request, res: Response) {
   try {
     const institutions = await institutionService.findAll();
-    res.status(200).json({ message: 'Found all institutions', data: institutions });
+    res
+      .status(200)
+      .json({ message: 'Found all institutions', data: institutions });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
@@ -45,7 +46,9 @@ async function findOne(req: Request, res: Response) {
 async function add(req: Request, res: Response) {
   try {
     const institutions = institutionService.create(req.body.sanitizedInput);
-    res.status(201).json({ message: 'Institution created', data: institutions });
+    res
+      .status(201)
+      .json({ message: 'Institution created', data: institutions });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
@@ -64,7 +67,7 @@ async function update(req: Request, res: Response) {
 async function remove(req: Request, res: Response) {
   try {
     const id = req.params.id;
-    const institution = institutionService.remove(id);
+    await institutionService.remove(id);
     res.status(200).send({ message: 'Institution deleted' });
   } catch (error: any) {
     res.status(500).json({ message: error.message });

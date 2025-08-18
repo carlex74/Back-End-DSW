@@ -1,5 +1,4 @@
 import { orm } from '../../shared/db/orm.js';
-import { Student } from './student.entity.js';
 import { Request, Response, NextFunction } from 'express';
 import { StudentService } from './student.services.js';
 
@@ -63,7 +62,7 @@ async function update(req: Request, res: Response) {
 async function remove(req: Request, res: Response) {
   try {
     const id = req.params.id;
-    const students = studentService.remove(id);
+    await studentService.remove(id);
     res.status(200).send({ message: 'Student deleted' });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
