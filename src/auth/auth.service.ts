@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { User, UserRole } from '../models/user/user.entity.js';
 import { Student } from '../models/student/student.entity.js';
+import { ObjectId } from '@mikro-orm/mongodb';
 
 // Service for authentication logic
 export class AuthService {
@@ -80,7 +81,8 @@ export class AuthService {
 
   // Gets user profile by ID
   public async getProfile(userId: string): Promise<User | null> {
-    const user = await this.em.findOne(User, { id: userId });
+    const userObjectId = new ObjectId(userId);
+    const user = await this.em.findOne(User, {_id: userObjectId}, { populate: ['studentProfile', 'professorProfile'] });
 
     if (!user) return null;
 
