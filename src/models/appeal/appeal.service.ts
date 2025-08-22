@@ -1,7 +1,9 @@
 import { EntityManager } from '@mikro-orm/core';
 import { Appeal } from './appeal.entity.js';
 import { CreateAppealType } from './appeal.schemas.js';
-import { User } from '../user/user.entity.js';
+import { User, UserRole } from '../user/user.entity.js';
+import { Professor } from '../professor/professor.entity.js';
+import { ObjectId } from '@mikro-orm/mongodb';
 
 export class AppealService {
   private em: EntityManager;
@@ -15,11 +17,14 @@ export class AppealService {
     userId: string,
     documentPath?: string
   ): Promise<Appeal> {
+    const userObjectId = new ObjectId(userId)
+    const userReference = this.em.getReference(User, userObjectId)
+
     const appeal = this.em.create(Appeal, {
       ...appealInput,
       date: new Date(),
       state: 'pending',
-      user: this.em.getReference(User, userId),
+      user: userReference,
       documentUrl: documentPath,
     });
 
@@ -40,8 +45,21 @@ export class AppealService {
     id: string,
     appealData: Partial<Appeal>
   ): Promise<Appeal> {
-    const appeal = await this.em.findOneOrFail(Appeal, { id });
+    const objectId = new ObjectId(id);
+    const appeal = await this.em.findOneOrFail(Appeal, { _id: objectId }, {populate: ['user']});
     this.em.assign(appeal, appealData);
+
+    if (appealData.state === 'accepted' && appeal.user) {
+      const userToPromote = appeal.user;
+      userToPromote.role = UserRole.PROFESSOR;
+      const newProfessorProfile = this.em.create(Professor, {
+        user: userToPromote,
+        state: 'active', 
+      });
+      userToPromote.professorProfile = newProfessorProfile;
+      this.em.persist(newProfessorProfile);
+    }
+
     await this.em.flush();
     return appeal;
   }
